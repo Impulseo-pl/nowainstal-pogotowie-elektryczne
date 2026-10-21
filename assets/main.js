@@ -233,7 +233,7 @@
   function splitLines(el) {
     if (!el || el.dataset.mtDone) return false;
     var raw = el.innerHTML;
-    var txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    var txt = (el.textContent || '').replace(/[^\S\u00a0]+/g, ' ').trim(); // twarda spacja (sierotki) zostaje
     // złożony markup (span z akcentem, link, ikona) albo bardzo długi tekst → prostszy wariant
     // 27.07.2026: dopisane em,b,strong,i,mark - hero fachowców ma akcent w H1 jako <em>,
     // a splitLines przepisywał nagłówek z samego textContent i kasował ten znacznik
