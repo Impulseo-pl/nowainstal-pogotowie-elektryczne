@@ -219,3 +219,45 @@ body.pim .sticky-call .sc-quote{background:var(--pim-navy);color:#fff}
 @media(max-width:560px){.v3-how-row{grid-template-columns:1fr}}
 /* kafle galerii: opóźnienie z animacji wejścia nie może zostać na najechaniu */
 .gallery .tile.reveal,.gallery .tile.reveal *{transition-delay:0s!important}
+
+/* ---------- kurtyna wejściowa (z wersji 1): logo, czerwona iskra w środku,
+   ekran rozjeżdża się na dwa bloki. Włącza ją JS raz na wizytę; awaria JS = zwykła strona. ---------- */
+.intro{display:none}
+html.intro-on .intro{display:block;position:fixed;inset:0;z-index:1000;pointer-events:auto;cursor:pointer}
+.intro-p{position:absolute;top:0;bottom:0;width:50.5%;background:#0f1739;transition:transform 1s cubic-bezier(.77,0,.18,1)}
+.intro-l{left:0}
+.intro-r{right:0}
+/* cienka czerwona linia z przerwą na logo: rośnie od środka do krawędzi, na końcach gaśnie */
+.intro-seam{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;
+  background:linear-gradient(180deg,rgba(215,38,45,0) 0%,rgba(215,38,45,.95) 22%,#ff4a50 50%,rgba(215,38,45,.95) 78%,rgba(215,38,45,0) 100%);
+  box-shadow:0 0 18px 2px rgba(215,38,45,.5);
+  -webkit-mask:linear-gradient(180deg,#000 0,#000 calc(50% - 78px),transparent calc(50% - 62px),transparent calc(50% + 92px),#000 calc(50% + 108px));
+  mask:linear-gradient(180deg,#000 0,#000 calc(50% - 78px),transparent calc(50% - 62px),transparent calc(50% + 92px),#000 calc(50% + 108px));
+  transform:scaleY(0);transform-origin:50% 50%;
+  transition:transform 1s cubic-bezier(.16,.84,.44,1) .15s,opacity .3s ease}
+.intro-logo{position:absolute;left:50%;top:50%;width:min(58vw,330px);transform:translate(-50%,-50%);opacity:0;
+  clip-path:inset(0 100% 0 0);transition:opacity .4s ease .25s,clip-path 1s cubic-bezier(.65,0,.35,1) .25s}
+.intro-logo img{display:block;width:100%;height:auto}
+.intro-tag{position:absolute;left:50%;top:calc(50% + 52px);transform:translate(-50%,6px);white-space:nowrap;
+  font-size:.68rem;font-weight:600;letter-spacing:.34em;padding-left:.34em;text-transform:uppercase;color:rgba(255,255,255,.5);opacity:0;
+  transition:opacity .6s ease .75s,transform .8s cubic-bezier(.16,.84,.44,1) .75s}
+html.intro-go .intro-logo{opacity:1;clip-path:inset(0 0 0 0)}
+html.intro-go .intro-tag{opacity:1;transform:translate(-50%,0)}
+html.intro-go .intro-seam{transform:scaleY(1)}
+html.intro-open .intro-logo,html.intro-open .intro-tag{opacity:0;transition:opacity .25s ease}
+html.intro-open .intro-l{transform:translateX(-101%)}
+html.intro-open .intro-r{transform:translateX(101%)}
+html.intro-open .intro-seam{opacity:0;transition:opacity .35s ease .1s}
+html.intro-open .intro{pointer-events:none}
+/* po otwarciu: zdjęcia lekko dojeżdżają, teksty wchodzą od dołu jeden po drugim */
+html.intro-on .v3-bg{transform:scale(1.12)}
+html.intro-done .v3-bg{transition:transform 1.6s cubic-bezier(.16,.84,.44,1)}
+html.intro-on .v3-pane-in>*{opacity:0;transform:translateY(18px)}
+html.intro-done .v3-pane-in>*{opacity:1;transform:none;transition:opacity .7s ease,transform .8s cubic-bezier(.16,.84,.44,1)}
+html.intro-done .v3-pane-in>*:nth-child(2){transition-delay:.07s}
+html.intro-done .v3-pane-in>*:nth-child(3){transition-delay:.14s}
+html.intro-done .v3-pane-in>*:nth-child(4){transition-delay:.21s}
+html.intro-done .v3-pane-plan .v3-pane-in>*{transition-delay:.12s}
+html.intro-done .v3-pane-plan .v3-pane-in>*:nth-child(2){transition-delay:.19s}
+html.intro-done .v3-pane-plan .v3-pane-in>*:nth-child(3){transition-delay:.26s}
+@media(prefers-reduced-motion:reduce){html.intro-on .intro{display:none}}
